@@ -1,4 +1,4 @@
-import { Sinth } from "./main.js";
+import { Sinth } from "../dist/main.mjs";
 const playButton = document.getElementById("playbutton");
 const beatsInput = document.getElementById("beats");
 const tempoInput = document.getElementById("tempo");
@@ -42,6 +42,7 @@ function MakeNotes() {
         }
         const newNote = {
             Beat: b,
+            Duration: 2,
             MidiNote: midiNote
         };
         notes.push(newNote);
@@ -51,7 +52,6 @@ function MakeNotes() {
 playButton.addEventListener("click", () => {
     if (!playing) {
         Sinth.initplay(MakeNotes());
-        console.log("Playing Sequence!");
         playing = true;
         playButton.textContent = "Stop";
         Sinth.play(sound, parseInt(tempoInput.value), NotifiedStop);

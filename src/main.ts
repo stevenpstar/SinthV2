@@ -1,5 +1,5 @@
 // main file for SinthV2
-import { InitPlay, Note, PlaySequence, StopSequence } from "./Sinth.js";
+import { InitPlay, PlaySequence, StopSequence } from "./Sinth.js";
 
 export module Sinth {
   export function CreateSinth(): void {}
@@ -17,3 +17,10 @@ export module Sinth {
     InitPlay(notes);
   }
 }
+
+export interface Note {
+  Beat: number;
+  Duration: number;
+  MidiNote: number;
+}
+

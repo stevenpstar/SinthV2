@@ -1,7 +1,7 @@
 // ** This is the Sinth default testing file ** //
 // ** Other Applications will integrate with main.ts ** //
 import { Note } from "./Sinth.js";
-import { Sinth } from "./main.js";
+import { Sinth } from "../dist/main.mjs";
 
 const playButton = document.getElementById("playbutton") as HTMLButtonElement;
 const beatsInput = document.getElementById("beats") as HTMLInputElement;
@@ -50,6 +50,7 @@ function MakeNotes(): Note[] {
     }
     const newNote: Note = {
       Beat: b,
+      Duration: 2,
       MidiNote: midiNote
     }
     notes.push(newNote);
@@ -62,7 +63,6 @@ playButton.addEventListener("click",
                             () => {
                               if (!playing) {
                                 Sinth.initplay(MakeNotes());
-                                console.log("Playing Sequence!");
                                 playing = true;
                                 playButton.textContent = "Stop";
                                 Sinth.play(sound, parseInt(tempoInput.value), NotifiedStop);

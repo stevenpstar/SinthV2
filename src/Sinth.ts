@@ -1,4 +1,4 @@
-// Prototyping
+import { Note } from "./main";
 
 const lookAhead = 25.0;
 const scheduleAheadTime = 0.1;
@@ -13,11 +13,6 @@ function InitPlay(notes: Note[]) {
 
 let play: boolean = false;
 
-interface Note {
-  Beat: number;
-  MidiNote: number;
-}
-
 function PlaySequence(
   aContext: AudioContext,
   sound: AudioBuffer,
@@ -28,7 +23,7 @@ function PlaySequence(
 
     const nextBeat = (notesInQueue[noteIndex].Beat - 1) * secondsPerBeat;
     if (aContext.currentTime + scheduleAheadTime >= nextBeat) {
-      scheduleNote(aContext, nextBeat, sound, notesInQueue[noteIndex]);
+      scheduleNote(aContext, nextBeat, sound, notesInQueue[noteIndex], secondsPerBeat);
       noteIndex++;
       if (noteIndex >= notesInQueue.length) {
         StopSequence();
@@ -47,14 +42,19 @@ function StopSequence(): void {
   play = false;
 }
 
-function scheduleNote(aContext: AudioContext, time: number, sound: AudioBuffer, note: Note): void {
+function scheduleNote(aContext: AudioContext, 
+                      time: number, 
+                      sound: AudioBuffer,
+                      note: Note,
+                      secondsPerBeat: number): void {
   const source = aContext.createBufferSource();
   const gainNode = aContext.createGain();
-  gainNode.gain.value = 0.25;
+  gainNode.gain.setValueAtTime(0.25, time);
   source.buffer = sound;
   source.playbackRate.value = GetPlaybackRate(69, note.MidiNote);
   source.connect(gainNode).connect(aContext.destination);
   source.start(time);
+  gainNode.gain.linearRampToValueAtTime(0, time + (note.Duration * secondsPerBeat));
 }
 
 function GetPlaybackRate(sampleNote: number = 69, desiredNote: number): number {

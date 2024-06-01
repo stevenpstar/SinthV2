@@ -1,5 +1,18 @@
 {
+  "tsup": {
+    "entry": [
+      "src/main.ts"
+    ],
+    "splitting": false,
+    "sourcemap": true,
+    "clean": true,
+    "target": "es6"
+  },
   "devDependencies": {
+    "tsup": "^8.0.2",
     "typescript": "^5.4.5"
+  },
+  "scripts": {
+    "build": "npx tsc && npx tsup --format esm --minify --dts"
   }
 }
