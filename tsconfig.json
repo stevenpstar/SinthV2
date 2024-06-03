@@ -1,7 +1,10 @@
 {
+  "include": ["src/**/*"],
   "compilerOptions": {
     "outDir": "comp",
     "module": "es6",
-    "target": "es6"
+    "target": "es6",
+    "declaration": true,
+    "declarationMap": true
   }
 }

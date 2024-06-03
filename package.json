@@ -13,6 +13,7 @@
     "typescript": "^5.4.5"
   },
   "scripts": {
-    "build": "npx tsc && npx tsup --format esm --minify --dts"
+    "build": "npx tsc && npx tsup --format esm --minify --dts",
+    "export": "npx tsc && npx tsup --format esm --minify --dts && rm -rf ../debugSheetV3/debugsheetv3/sinth && cp -r dist ../debugSheetV3/debugsheetv3/sinth"
   }
 }
