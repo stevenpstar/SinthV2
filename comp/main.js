@@ -1,5 +1,5 @@
 // main file for SinthV2
-import { InitPlay, PlaySequence, StopSequence } from "./Sinth.js";
+import { InitPlay, PlayFull, PlayMetronome, PlaySequence, StopSequence } from "./Sinth.js";
 export var Sinth;
 (function (Sinth) {
     function CreateSinth() { }
@@ -9,6 +9,16 @@ export var Sinth;
         PlaySequence(newContext, sound, tempo, callback);
     }
     Sinth.play = play;
+    function playFull(sound, tempo, notes, callback) {
+        const newContext = new AudioContext();
+        PlayFull(newContext, sound, tempo, notes, callback);
+    }
+    Sinth.playFull = playFull;
+    function playMetronome(count, tempo) {
+        const newContext = new AudioContext();
+        PlayMetronome(newContext, count, tempo);
+    }
+    Sinth.playMetronome = playMetronome;
     function stop() {
         StopSequence();
     }
