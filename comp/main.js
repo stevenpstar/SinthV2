@@ -4,19 +4,16 @@ export var Sinth;
 (function (Sinth) {
     function CreateSinth() { }
     Sinth.CreateSinth = CreateSinth;
-    function play(sound, tempo, callback) {
-        const newContext = new AudioContext();
-        PlaySequence(newContext, sound, tempo, callback);
+    function play(aContext, sound, tempo, callback) {
+        PlaySequence(aContext, aContext.currentTime, sound, tempo, callback);
     }
     Sinth.play = play;
-    function playFull(sound, tempo, notes, callback) {
-        const newContext = new AudioContext();
-        PlayFull(newContext, sound, tempo, notes, callback);
+    function playFull(aContext, sound, tempo, notes, callback) {
+        PlayFull(aContext, aContext.currentTime, sound, tempo, notes, callback);
     }
     Sinth.playFull = playFull;
-    function playMetronome(count, tempo) {
-        const newContext = new AudioContext();
-        PlayMetronome(newContext, count, tempo);
+    function playMetronome(aContext, count, tempo) {
+        PlayMetronome(aContext, aContext.currentTime, count, tempo);
     }
     Sinth.playMetronome = playMetronome;
     function stop() {

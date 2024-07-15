@@ -17,6 +17,7 @@ function LoadSound(path) {
         sound = buffer;
         soundLoaded = true;
         playButton.disabled = false;
+        console.log("Playbutton is not disabled");
         playButton.textContent = "Play";
     });
 }
@@ -50,11 +51,12 @@ function MakeNotes() {
     return notes;
 }
 playButton.addEventListener("click", () => {
+    console.log("LOG SOMETHING");
     if (!playing) {
         Sinth.initplay(MakeNotes());
         playing = true;
         playButton.textContent = "Stop";
-        Sinth.play(sound, parseInt(tempoInput.value), NotifiedStop);
+        Sinth.play(aContext, sound, parseInt(tempoInput.value), NotifiedStop);
     }
     else {
         NotifiedStop();
