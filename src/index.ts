@@ -16,9 +16,9 @@ let playing = false;
 function LoadSound(path: string): void {
   let aBuffer: Promise<AudioBuffer>;
   fetch(path)
-    .then(resp => resp.arrayBuffer())
-    .then(aB =>  aBuffer = aContext.decodeAudioData(aB))
-    .then(buffer => {
+    .then((resp) => resp.arrayBuffer())
+    .then((aB) => (aBuffer = aContext.decodeAudioData(aB)))
+    .then((buffer) => {
       sound = buffer;
       soundLoaded = true;
       playButton.disabled = false;
@@ -26,12 +26,12 @@ function LoadSound(path: string): void {
       playButton.textContent = "Play";
     });
 }
-LoadSound('../Assets/A4vH.flac');
+LoadSound("../Assets/A4vH.flac");
 
 function GetNumbers(str: string): number[] {
   const stringArray = str.split(",");
   let nums: number[] = [];
-  stringArray.map(e => nums.push(parseFloat(e)));
+  stringArray.map((e) => nums.push(parseFloat(e)));
   return nums;
 }
 
@@ -52,26 +52,23 @@ function MakeNotes(): Note[] {
     const newNote: Note = {
       Beat: b,
       Duration: 2,
-      MidiNote: midiNote
-    }
+      MidiNote: midiNote,
+    };
     notes.push(newNote);
-  })
+  });
 
   return notes;
 }
 
-playButton.addEventListener("click",
-                            () => {
-                              console.log("LOG SOMETHING");
-                              if (!playing) {
-                                Sinth.initplay(MakeNotes());
-                                playing = true;
-                                playButton.textContent = "Stop";
-                                Sinth.play(aContext, sound, parseInt(tempoInput.value), NotifiedStop);
-                              } else {
-                                NotifiedStop();
-                                Sinth.stop();
-                              }
-                            });
-
-
+playButton.addEventListener("click", () => {
+  console.log("LOG SOMETHING");
+  if (!playing) {
+    Sinth.initplay(MakeNotes());
+    playing = true;
+    playButton.textContent = "Stop";
+    Sinth.play(aContext, sound, parseInt(tempoInput.value), 100, NotifiedStop);
+  } else {
+    NotifiedStop();
+    Sinth.stop();
+  }
+});

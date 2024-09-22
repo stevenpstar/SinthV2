@@ -11,9 +11,9 @@ let playing = false;
 function LoadSound(path) {
     let aBuffer;
     fetch(path)
-        .then(resp => resp.arrayBuffer())
-        .then(aB => aBuffer = aContext.decodeAudioData(aB))
-        .then(buffer => {
+        .then((resp) => resp.arrayBuffer())
+        .then((aB) => (aBuffer = aContext.decodeAudioData(aB)))
+        .then((buffer) => {
         sound = buffer;
         soundLoaded = true;
         playButton.disabled = false;
@@ -21,11 +21,11 @@ function LoadSound(path) {
         playButton.textContent = "Play";
     });
 }
-LoadSound('../Assets/A4vH.flac');
+LoadSound("../Assets/A4vH.flac");
 function GetNumbers(str) {
     const stringArray = str.split(",");
     let nums = [];
-    stringArray.map(e => nums.push(parseFloat(e)));
+    stringArray.map((e) => nums.push(parseFloat(e)));
     return nums;
 }
 function NotifiedStop() {
@@ -44,7 +44,7 @@ function MakeNotes() {
         const newNote = {
             Beat: b,
             Duration: 2,
-            MidiNote: midiNote
+            MidiNote: midiNote,
         };
         notes.push(newNote);
     });
@@ -56,7 +56,7 @@ playButton.addEventListener("click", () => {
         Sinth.initplay(MakeNotes());
         playing = true;
         playButton.textContent = "Stop";
-        Sinth.play(aContext, sound, parseInt(tempoInput.value), NotifiedStop);
+        Sinth.play(aContext, sound, parseInt(tempoInput.value), 100, NotifiedStop);
     }
     else {
         NotifiedStop();

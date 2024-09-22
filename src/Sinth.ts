@@ -18,41 +18,60 @@ function PlayFull(
   startTime: number,
   sound: AudioBuffer,
   tempo: number,
+  volume: number,
   notes: Note[],
-  notifyStop: () => void): void {
-    const spb = 60.0 / tempo;
-    let nIndex = 0;
-    notes.forEach((n: Note, i: number) => 
-                  scheduleNote(aContext, 
-                   startTime + (notes[i].Beat - 1) * spb,
-                   sound,
-                   n,
-                   spb));
-    notifyStop();
-  }
+  notifyStop: () => void,
+): void {
+  const spb = 60.0 / tempo;
+  let nIndex = 0;
+  notes.forEach((n: Note, i: number) =>
+    scheduleNote(
+      aContext,
+      startTime + (notes[i].Beat - 1) * spb,
+      sound,
+      n,
+      spb,
+      volume,
+    ),
+  );
+  notifyStop();
+}
 
 function PlaySequence(
   aContext: AudioContext,
   startTime: number,
   sound: AudioBuffer,
   tempo: number,
-  notifyStop: () => void): void {
-    const secondsPerBeat = 60.0 / tempo;
-    play = true;
+  volume: number,
+  notifyStop: () => void,
+): void {
+  const secondsPerBeat = 60.0 / tempo;
+  play = true;
 
-    const nextBeat = startTime + (notesInQueue[noteIndex].Beat - 1) * secondsPerBeat;
-    if (aContext.currentTime + scheduleAheadTime >= nextBeat) {
-      scheduleNote(aContext, nextBeat, sound, notesInQueue[noteIndex], secondsPerBeat);
-      noteIndex++;
-      if (noteIndex >= notesInQueue.length) {
-        StopSequence();
-        notifyStop();
-      }
+  const nextBeat =
+    startTime + (notesInQueue[noteIndex].Beat - 1) * secondsPerBeat;
+  if (aContext.currentTime + scheduleAheadTime >= nextBeat) {
+    scheduleNote(
+      aContext,
+      nextBeat,
+      sound,
+      notesInQueue[noteIndex],
+      secondsPerBeat,
+      volume,
+    );
+    noteIndex++;
+    if (noteIndex >= notesInQueue.length) {
+      StopSequence();
+      notifyStop();
     }
+  }
 
-    if (play) {
-      timerID = setTimeout(() => PlaySequence(aContext, startTime, sound, tempo, notifyStop), lookAhead);
-    }
+  if (play) {
+    timerID = setTimeout(
+      () => PlaySequence(aContext, startTime, sound, tempo, volume, notifyStop),
+      lookAhead,
+    );
+  }
 }
 
 function StopSequence(): void {
@@ -61,44 +80,55 @@ function StopSequence(): void {
   play = false;
 }
 
-function scheduleNote(aContext: AudioContext, 
-                      time: number, 
-                      sound: AudioBuffer,
-                      note: Note,
-                      secondsPerBeat: number): void {
+function scheduleNote(
+  aContext: AudioContext,
+  time: number,
+  sound: AudioBuffer,
+  note: Note,
+  secondsPerBeat: number,
+  volume: number,
+): void {
+  // MAX VOLUME = 0.25
+  // MIN VOLUME = 0.0
+  const perc = volume / 100;
+  const MAX_VOLUME = 0.25;
+  const v = MAX_VOLUME * perc;
   const source = aContext.createBufferSource();
   const gainNode = aContext.createGain();
-  gainNode.gain.setValueAtTime(0.25, time);
+  gainNode.gain.setValueAtTime(v, time);
   source.buffer = sound;
   source.playbackRate.value = GetPlaybackRate(69, note.MidiNote);
   source.connect(gainNode).connect(aContext.destination);
   source.start(time);
-  gainNode.gain.linearRampToValueAtTime(0, time + (note.Duration * secondsPerBeat));
+  gainNode.gain.linearRampToValueAtTime(
+    0,
+    time + note.Duration * secondsPerBeat,
+  );
 }
 
 function GetPlaybackRate(sampleNote: number = 69, desiredNote: number): number {
   return 2 ** ((desiredNote - sampleNote) / 12);
 }
 
-function PlayMetronome(aContext: AudioContext,
-                       startTime: number,
-                       count: number,
-                       tempo: number): void {
+function PlayMetronome(
+  aContext: AudioContext,
+  startTime: number,
+  count: number,
+  tempo: number,
+): void {
   const bps = 60 / tempo;
 
-  for (let i=0;i<count;i++) {
+  for (let i = 0; i < count; i++) {
     const timeStart = startTime + bps * i;
-    const timeStop = startTime + (bps * i) + 0.2;
+    const timeStop = startTime + bps * i + 0.2;
     const osc = aContext.createOscillator();
     const env = aContext.createGain();
-    osc.frequency.value = (i === 0 ? 600 : 500);
+    osc.frequency.value = i === 0 ? 600 : 500;
     env.gain.setValueAtTime(0.5, timeStart);
     osc.connect(env).connect(aContext.destination);
     osc.start(timeStart);
-    osc.stop(timeStop)
+    osc.stop(timeStop);
   }
 }
 
 export { PlaySequence, StopSequence, InitPlay, Note, PlayFull, PlayMetronome };
-
-
