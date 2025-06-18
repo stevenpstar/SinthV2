@@ -39,7 +39,7 @@ function scheduleNote(aContext, time, sound, note, secondsPerBeat, volume) {
     // MAX VOLUME = 0.25
     // MIN VOLUME = 0.0
     const perc = volume / 100;
-    const MAX_VOLUME = 0.25;
+    const MAX_VOLUME = 0.5;
     const v = MAX_VOLUME * perc;
     const source = aContext.createBufferSource();
     const gainNode = aContext.createGain();

@@ -15,6 +15,7 @@
   "scripts": {
     "build": "npx tsc && npx tsup --format esm --minify --dts",
     "export": "npx tsc && npx tsup --format esm --minify --dts && rm -rf ../debugSheetV3/debugsheetv3/sinth && cp -r dist ../debugSheetV3/debugsheetv3/sinth",
+    "mxmlbundle": "npx tsc && npx tsup --format esm --minify --dts && rm -rf ../DebugSheetV2/modules/sinth && cp -r dist ../DebugSheetV2/modules/sinth",
     "mtrain": "npx tsc && npx tsup --format esm --minify --dts && rm -rf ../MusicTrainer/musictrainer/src/lib/sinth && cp -r dist ../MusicTrainer/musictrainer/src/lib/sinth",
     "mtrainfe": "npx tsc && npx tsup --format esm --minify --dts && rm -rf ../MusicTrainerFrontEnd/musictrainer/src/lib/sinth && cp -r dist ../MusicTrainerFrontEnd/musictrainer/src/lib/sinth"
   }

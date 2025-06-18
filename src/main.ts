@@ -67,4 +67,5 @@ export interface Note {
   Beat: number;
   Duration: number;
   MidiNote: number;
+  sheetNote: any;
 }

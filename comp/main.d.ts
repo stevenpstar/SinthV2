@@ -10,5 +10,6 @@ export interface Note {
     Beat: number;
     Duration: number;
     MidiNote: number;
+    sheetNote: any;
 }
 //# sourceMappingURL=main.d.ts.map

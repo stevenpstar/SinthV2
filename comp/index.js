@@ -45,6 +45,7 @@ function MakeNotes() {
             Beat: b,
             Duration: 2,
             MidiNote: midiNote,
+            sheetNote: null,
         };
         notes.push(newNote);
     });
